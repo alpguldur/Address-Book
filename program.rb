@@ -58,15 +58,3 @@ while true
 	    puts "The contact has been updated."
     else
     	puts "Contact not found"
-
-
-    
-
-
-
-
-
-
-
-
-
