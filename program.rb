@@ -25,8 +25,8 @@ class AddressBook
 
   def list
     if @contacts.any?
-      @contacts.each do |contact|
-        puts contact[:first_name] + " " + 
+      @contacts.to_enum.with_index(1).each do |contact, index|
+        puts index.to_s + ", " + contact[:first_name] + " " + 
              contact[:last_name] + ", " +
              contact[:phone_number] + ", " +
              contact[:email]
