@@ -24,13 +24,14 @@ class AddressBook
   end 
 
   def list
-    if contacts = [contact]
+    if @contacts.any?
       @contacts.each do |contact|
         puts contact[:first_name] + " " + 
              contact[:last_name] + ", " +
              contact[:phone_number] + ", " +
              contact[:email]
-    elsif contacts = []
+      end       
+    else
       puts "The list is empty."               
     end  	
   end 
@@ -61,7 +62,7 @@ class AddressBook
     if input == "Yes"
       contacts.delete(contact)
       puts "The contact has been deleted."
-    else
+    end  
   end  
     
   def search
@@ -70,11 +71,13 @@ class AddressBook
     contacts.include? 'first_name'
     @contacts.each do |contact|
       puts contact[:first_name]
+    end  
     puts "Last Name"
     last_name = gets.chomp
     contacts.include? 'last_name'
     @contacts.each do |contact|
       puts contact[:first_name] + " " + contact[:last_name] 
+    end  
   end    
 end
 
@@ -96,5 +99,4 @@ while true
   elsif input == "search"
     address_book.search  
   end
-
 end  
