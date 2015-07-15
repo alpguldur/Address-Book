@@ -37,47 +37,66 @@ class AddressBook
   end 
 
   def edit
-    puts "Please fill out the contact attributes."
-    puts "First Name:"
-    first_name = gets.chomp
-    puts "Last Name:"
-    last_name = gets.chomp
-    puts "Phone Number:"
-    phone_number = gets.chomp
-    puts "Email:"
-    email = gets.chomp
-    contact = {
-      first_name: first_name,
-      last_name: last_name,
-      phone_number: phone_number,
-      email: email
-      } 
-    @contacts << contact
-    puts "The contact has been updated."
+    if @contacts[id].any?     
+      puts "Please fill out the contact attributes."
+      puts "First Name:"
+      first_name = gets.chomp
+      puts "Last Name:"
+      last_name = gets.chomp
+      puts "Phone Number:"
+      phone_number = gets.chomp
+      puts "Email:"
+      email = gets.chomp
+      new_contact = {
+        first_name: first_name,
+        last_name: last_name,
+        phone_number: phone_number,
+        email: email
+        }  
+      @contacts << new_contact
+      @contacts.delete(contact)
+      puts "The contact has been updated."
+    else
+      puts "Contact not found."  
+    end  
   end 
 
   def delete
-    puts "Are you sure to delete this contact?"
-    input = gets.chomp
-    if input == "Yes"
-      contacts.delete(contact)
-      puts "The contact has been deleted."
-    end  
+    if @contacts[id].any?
+      puts "Are you sure to delete this contact?"
+      input = gets.chomp
+      if input == "Yes"
+        @contacts.delete(contact)
+        puts "The contact has been deleted."
+      end
+    else
+      puts "Contact not found."
+    end      
   end  
     
   def search
-    puts "First Name"
-    first_name = gets.chomp
-    contacts.include? 'first_name'
-    @contacts.each do |contact|
-      puts contact[:first_name]
-    end  
-    puts "Last Name"
-    last_name = gets.chomp
-    contacts.include? 'last_name'
-    @contacts.each do |contact|
-      puts contact[:first_name] + " " + contact[:last_name] 
-    end  
+    if @contacts.any?
+      puts "First Name"
+      first_name = gets.chomp
+      @contacts.include? 'first_name'
+      @contacts.to_enum.with_index(1).each do |contact, index|
+        puts index.to_s + ", " + contact[:first_name] + " " + 
+             contact[:last_name] + ", " +
+             contact[:phone_number] + ", " +
+             contact[:email]
+      end  
+      puts "Last Name"
+      last_name = gets.chomp
+      @contacts.include? 'last_name'
+      @contacts.to_enum.with_index(1).each do |contact, index|
+        puts index.to_s + ", " + contact[:first_name] + " " + 
+             contact[:last_name] + ", " +
+             contact[:phone_number] + ", " +
+             contact[:email] 
+      end
+    else
+      puts "No results found."  
+    end    
   end    
 end
 
@@ -87,16 +106,18 @@ address_book = AddressBook.new
 while true
   puts "Select an action: list | search | create | edit <ID> | delete <ID>"
  
-  input = gets.chomp  
-  if input == "create"
+  inputs = gets.chomp.split(' ')
+  action = inputs.first
+  id = inputs.last   
+  if action == "create"
     address_book.create
-  elsif input == "list"
+  elsif action == "list"
     address_book.list
-  elsif input == "edit"
+  elsif action == "edit"
     address_book.edit
-  elsif input == "delete"
+  elsif action == "delete"
     address_book.delete  
-  elsif input == "search"
+  elsif action == "search"
     address_book.search  
   end
 end  
