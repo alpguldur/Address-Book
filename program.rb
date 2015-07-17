@@ -18,7 +18,7 @@ class AddressBook
       last_name: last_name,
 	    phone_number: phone_number,
 	    email: email
-      }	
+    }	
     @contacts << contact
     puts "The contact has been created."
   end 
@@ -36,8 +36,8 @@ class AddressBook
     end  	
   end 
 
-  def edit
-    if @contacts[id].any?     
+  def edit(index)
+    if @contacts[index]   
       puts "Please fill out the contact attributes."
       puts "First Name:"
       first_name = gets.chomp
@@ -46,27 +46,25 @@ class AddressBook
       puts "Phone Number:"
       phone_number = gets.chomp
       puts "Email:"
-      email = gets.chomp
-      new_contact = {
+      email = gets.chomp  
+      @contacts[index] = {
         first_name: first_name,
         last_name: last_name,
         phone_number: phone_number,
         email: email
-        }  
-      @contacts << new_contact
-      @contacts.delete(contact)
+      } 
       puts "The contact has been updated."
     else
       puts "Contact not found."  
     end  
   end 
 
-  def delete
-    if @contacts[id].any?
+  def delete(index)
+    if @contacts[index]
       puts "Are you sure to delete this contact?"
       input = gets.chomp
       if input == "Yes"
-        @contacts.delete(contact)
+        @contacts.delete_at(index)
         puts "The contact has been deleted."
       end
     else
@@ -108,15 +106,15 @@ while true
  
   inputs = gets.chomp.split(' ')
   action = inputs.first
-  id = inputs.last   
+  index = Integer(inputs.last) - 1 if ['edit', 'delete'].include?(action) 
   if action == "create"
     address_book.create
   elsif action == "list"
     address_book.list
   elsif action == "edit"
-    address_book.edit
+    address_book.edit(index)
   elsif action == "delete"
-    address_book.delete  
+    address_book.delete(index)  
   elsif action == "search"
     address_book.search  
   end
