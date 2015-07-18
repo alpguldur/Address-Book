@@ -26,10 +26,7 @@ class AddressBook
   def list
     if @contacts.any?
       @contacts.to_enum.with_index(1).each do |contact, index|
-        puts index.to_s + ", " + contact[:first_name] + " " + 
-             contact[:last_name] + ", " +
-             contact[:phone_number] + ", " +
-             contact[:email]
+        print_contact(contact, index)
       end       
     else
       puts "The list is empty."               
@@ -72,30 +69,33 @@ class AddressBook
     end      
   end  
     
-  def search
-    if @contacts.any?
-      puts "First Name"
-      first_name = gets.chomp
-      @contacts.include? 'first_name'
-      @contacts.to_enum.with_index(1).each do |contact, index|
-        puts index.to_s + ", " + contact[:first_name] + " " + 
-             contact[:last_name] + ", " +
-             contact[:phone_number] + ", " +
-             contact[:email]
-      end  
-      puts "Last Name"
-      last_name = gets.chomp
-      @contacts.include? 'last_name'
-      @contacts.to_enum.with_index(1).each do |contact, index|
-        puts index.to_s + ", " + contact[:first_name] + " " + 
-             contact[:last_name] + ", " +
-             contact[:phone_number] + ", " +
-             contact[:email] 
-      end
-    else
-      puts "No results found."  
-    end    
-  end    
+  def search    
+    puts "First Name"
+    first_name = gets.chomp        
+    puts "Last Name"
+    last_name = gets.chomp
+    contacts_to_print = []   
+    @contacts.to_enum.with_index(1).each do |contact, index|
+      next if !first_name.empty? && contact[:first_name] != first_name
+      next if !last_name.empty? && contact[:last_name] != last_name
+      contacts_to_print << [contact, index]        
+    end 
+    if contacts_to_print.empty?
+      puts "No results found"
+      return
+    end 
+    contacts_to_print.each do |contact, index|
+      print_contact(contact, index) 
+    end          
+  end 
+
+  def print_contact(contact, index) 
+    puts index.to_s + ", " + 
+         contact[:first_name] + " " + 
+         contact[:last_name] + ", " +
+         contact[:phone_number] + ", " +
+         contact[:email] 
+  end           
 end
 
 address_book = AddressBook.new
@@ -116,6 +116,6 @@ while true
   elsif action == "delete"
     address_book.delete(index)  
   elsif action == "search"
-    address_book.search  
+    address_book.search      
   end
 end  
